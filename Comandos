@@ -1,2 +1,40 @@
 Comandos para el uso de las maquinas virtuales en Linux con Ubuntu y Windows Server 2022
+1. Comandos ejecutados en Ubuntu Server (Nodo 1)
+Bash
+# Cambiar el nombre del equipo
+sudo hostnamectl set-hostname Srv-Linux-Sistemas
 
+# Actualizar el sistema
+sudo apt update && sudo apt upgrade -y
+
+# Configurar la IP estática (Netplan)
+sudo nano /etc/netplan/00-installer-config.yaml
+sudo netplan apply
+
+# Verificar la IP y el estado de las interfaces
+ip addr show ens34
+
+# Crear y dar permisos al script de diagnóstico
+nano tarea1_diagnostico.sh
+chmod +x tarea1_diagnostico.sh
+./tarea1_diagnostico.sh
+
+# Prueba de conectividad (Ping)
+ping -c 4 192.168.10.20
+2. Comandos ejecutados en Windows Server y Cliente (PowerShell)
+PowerShell
+# Cambiar el nombre del equipo (Requiere reinicio)
+Rename-Computer -NewName "SRV-WIN-SISTEMA" -Restart
+
+# Configurar la IP estática en la red interna
+# (Usando Ethernet1 que fue el que te funcionó)
+New-NetIPAddress -InterfaceAlias "Ethernet1" -IPAddress 192.168.10.20 -PrefixLength 24
+
+# Habilitar el Firewall para permitir el Ping (ICMPv4)
+netsh advfirewall firewall add rule name="Permitir Ping" protocol=icmpv4 dir=in action=allow
+
+# Ejecutar el script de diagnóstico
+.\tarea1_diagnostico.ps1
+
+# Verificar la configuración de red
+ipconfig
